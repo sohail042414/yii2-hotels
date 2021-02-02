@@ -31,11 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'dish_id',
             'dish_name',
-            'photo',
+            //'photo',
+            [
+                'attribute'=>'photo',
+                'value'=>(\Yii::$app->request->BaseUrl.'uploads/'.$model->photo),
+                'format' => ['image',['width'=>'100','height'=>'100']],
+            ],
             'status',
             'date_created',
             'date_modified',
-            'ip_address',
         ],
     ]) ?>
 

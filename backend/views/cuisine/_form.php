@@ -15,8 +15,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'cuisine_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'sequence')->textInput() ?>
-    
-    <?= $form->field($model, 'featured_image')->fileInput() ?>
+    <?php /*imageFile is holding featured image. */?>
+    <?= $form->field($model, 'imageFile')->fileInput() ?>
+
     <?php /* ?>
     <?= $form->field($model, 'status')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'cuisine_name_trans')->textarea(['rows' => 6]) ?>

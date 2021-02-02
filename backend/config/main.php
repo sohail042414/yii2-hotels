@@ -36,6 +36,9 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],                 
+        'settings' => [         
+            'class' => 'app\components\Settings',
         ],
         /*
         'urlManager' => [

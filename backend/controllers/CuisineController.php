@@ -65,19 +65,14 @@ class CuisineController extends Controller
      */
     public function actionCreate()
     {
+
         $model = new Cuisine();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
 
-            /*
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload()) {
-                $model->featured_image = $model->imageFile->name;        
-                $model->update();            
+            if($model->addCusine()){
+                return $this->redirect(['view', 'id' => $model->cuisine_id]);
             }
-            */
-
-            return $this->redirect(['view', 'id' => $model->cuisine_id]);
 
         }
 
@@ -98,6 +93,7 @@ class CuisineController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->uploadImage($model);
             return $this->redirect(['view', 'id' => $model->cuisine_id]);
         }
 
@@ -118,6 +114,25 @@ class CuisineController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    /**
+     * 
+     */
+    private function uploadImage($model){
+
+        $model->imageFile = UploadedFile::getInstance($model,'imageFile');
+        
+        if(!is_object($model->imageFile)){
+            return FALSE;
+        }
+
+        $featured_image = 'image-'.time(). "." .$model->imageFile->extension;
+        $path = Yii::$app->settings->getUploadPath() . $featured_image;
+        $model->featured_image =  $featured_image;
+        $model->save();
+        $model->imageFile->saveAs($path);
+
+        return TRUE;
     }
 
     /**

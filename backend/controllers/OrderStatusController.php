@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Dish;
-use backend\models\SearchDish;
+use backend\models\OrderStatus;
+use backend\models\SearchOrderStatus;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
 
 /**
- * DishController implements the CRUD actions for Dish model.
+ * OrderStatusController implements the CRUD actions for OrderStatus model.
  */
-class DishController extends Controller
+class OrderStatusController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,12 +30,12 @@ class DishController extends Controller
     }
 
     /**
-     * Lists all Dish models.
+     * Lists all OrderStatus models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SearchDish();
+        $searchModel = new SearchOrderStatus();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class DishController extends Controller
     }
 
     /**
-     * Displays a single Dish model.
+     * Displays a single OrderStatus model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,24 +58,16 @@ class DishController extends Controller
     }
 
     /**
-     * Creates a new Dish model.
+     * Creates a new OrderStatus model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Dish();
+        $model = new OrderStatus();
 
-        // if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        //     return $this->redirect(['view', 'id' => $model->dish_id]);
-        // }
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            if($model->addDish()){
-                return $this->redirect(['view', 'id' => $model->dish_id]);
-            }
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->stats_id]);
         }
 
         return $this->render('create', [
@@ -85,7 +76,7 @@ class DishController extends Controller
     }
 
     /**
-     * Updates an existing Dish model.
+     * Updates an existing OrderStatus model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,8 +87,7 @@ class DishController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->uploadImage($model);
-            return $this->redirect(['view', 'id' => $model->dish_id]);
+            return $this->redirect(['view', 'id' => $model->stats_id]);
         }
 
         return $this->render('update', [
@@ -106,7 +96,7 @@ class DishController extends Controller
     }
 
     /**
-     * Deletes an existing Dish model.
+     * Deletes an existing OrderStatus model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -119,28 +109,16 @@ class DishController extends Controller
         return $this->redirect(['index']);
     }
 
-    private function uploadImage($model){
-
-        $model->imageFile = UploadedFile::getInstance($model,'imageFile');
-        $photo = 'image-'.time(). "." .$model->imageFile->extension;
-        $path = Yii::$app->settings->getUploadPath() . $photo;
-        $model->photo =  $photo;
-        $model->save();
-        $model->imageFile->saveAs($path);
-
-        return TRUE;
-    }
-
     /**
-     * Finds the Dish model based on its primary key value.
+     * Finds the OrderStatus model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Dish the loaded model
+     * @return OrderStatus the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Dish::findOne($id)) !== null) {
+        if (($model = OrderStatus::findOne($id)) !== null) {
             return $model;
         }
 

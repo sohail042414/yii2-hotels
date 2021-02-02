@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-use yii\helpers\Url;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "{{%cuisine}}".
@@ -47,7 +47,7 @@ class Cuisine extends \yii\db\ActiveRecord
             [['cuisine_name', 'featured_image', 'slug'], 'string', 'max' => 255],
             [['ip_address'], 'string', 'max' => 50],
             [['status'], 'string', 'max' => 100],
-            //[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png,jpg,jpeg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'png,jpg,jpeg'],
         ];
     }
 
@@ -67,7 +67,7 @@ class Cuisine extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'Status'),
             'featured_image' => Yii::t('app', 'Featured Image'),
             'slug' => Yii::t('app', 'Slug'),
-            //'imageFile' => Yii::t('app', 'Featured Image'),
+            'imageFile' => Yii::t('app', 'Featured Image'),
         ];
     }
 
@@ -80,26 +80,31 @@ class Cuisine extends \yii\db\ActiveRecord
         return new CuisineQuery(get_called_class());
     }
 
-    /*
-    
-    public function upload()
-    {
-         if ($this->validate()) {
 
-            $newName = 'cusine-' .rand(0,1000) . '-' . time() . '-image.' . $this->imageFile->extension;
+    public function addCusine(){
 
-            if ($this->imageFile->saveAs(Url::to('@frontend/web/uploads/') . $newName)) {
-                return TRUE;
-            }
+        if(!$this->validate()){
+            return FALSE;
+        }
 
-            // $this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            // return true;
-        } 
+        $cusine = $this;
+        $cusine->imageFile = UploadedFile::getInstance($cusine,'imageFile');
+        if(!is_object($cusine->imageFile)){
+            $cusine->save();
+            return TRUE;
+        }
+        
+        $featured_image = 'image-'.time(). "." .$this->imageFile->extension;
+        $path = Yii::$app->settings->getUploadPath() . $featured_image;
+        $cusine->featured_image =  $featured_image;
+        $cusine->save();
+        $cusine->imageFile->saveAs($path);
 
-        return FALSE;
+        return TRUE;
     }
-    */
 
+
+    /*
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -111,4 +116,5 @@ class Cuisine extends \yii\db\ActiveRecord
         // ...custom code here...
         return true;
     }
+    */
 }

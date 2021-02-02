@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\SearchDish */
+/* @var $searchModel backend\models\SearchOrderStatus */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Dishes');
+$this->title = Yii::t('app', 'Order Statuses');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="dish-index">
+<div class="order-status-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Dish'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Order Status'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -26,13 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            
-            'dish_id',
-            'dish_name',
-            'photo',
-            'status',
-            //'date_created',
-            //'date_modified',
+
+            'stats_id',
+            //'merchant_id',
+            'description',
+            // 'date_created',
+            // 'date_modified',
             //'ip_address',
 
             ['class' => 'yii\grid\ActionColumn'],
